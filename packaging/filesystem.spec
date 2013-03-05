@@ -2,17 +2,14 @@
 %define debug_package %{nil}
 Name:           filesystem
 Version:        3.1
-Release:        2%{?dist}
+Release:        0
 License:        Public Domain
 Summary:        The basic directory layout for a Linux system
 Url:            https://fedorahosted.org/filesystem
-Group:          System Environment/Base
-# Raw source1 URL: https://fedorahosted.org/filesystem/browser/lang-exceptions?format=raw
-Source1:        https://fedorahosted.org/filesystem/browser/lang-exceptions
-Source2:        iso_639.sed
-Source3:        iso_3166.sed
-BuildRequires:  iso-codes
+Group:          System/Base
 Requires(pre): setup
+Source2:        languages
+Source3:        languages.man
 
 
 %description
@@ -27,15 +24,28 @@ rm -f $RPM_BUILD_DIR/filelist
 %build
 
 %install
-install -p -c -m755 %{SOURCE2} %{buildroot}/iso_639.sed
-install -p -c -m755 %{SOURCE3} %{buildroot}/iso_3166.sed
+function create_dir () {
+    local MODE=$1
+    case "$MODE" in
+     \#*) return ;;
+    esac
+    local OWNR=$2
+    local GRUP=$3
+    local NAME=$4
+    local XTRA=$5
+    local BDIR=`dirname $NAME`
+    test -d "$RPM_BUILD_ROOT/$NAME" && { echo "dir $NAME does already exist" ; echo "input out of sequence ?" ; exit 1 ; }
+    test -n "$BDIR" -a ! -d $RPM_BUILD_ROOT$BDIR && create_dir 0755 root root $BDIR
+    mkdir -m $MODE $RPM_BUILD_ROOT/$NAME
+    echo "$XTRA%%dir %%attr($MODE,$OWNR,$GRUP) $NAME" >> $RPM_BUILD_DIR/filelist
+}
 
 cd %{buildroot}
 
 mkdir -p boot dev \
         etc/{X11/{applnk,fontpath.d},xdg/autostart,opt,pm/{config.d,power.d,sleep.d},xinetd.d,skel,sysconfig,pki} \
         home media mnt opt proc root run/lock srv sys tmp \
-        usr/{bin,etc,games,include,%{_lib}/{games,sse2,tls,X11,pm-utils/{module.d,power.d,sleep.d}},lib/{games,locale,modules,sse2},libexec,local/{bin,etc,games,lib,%{_lib},sbin,src,share/{applications,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x},info},libexec,include,},sbin,share/{aclocal,applications,augeas/lenses,backgrounds,desktop-directories,dict,doc,empty,games,ghostscript/conf.d,gnome,icons,idl,info,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x,0p,1p,3p},mime-info,misc,omf,pixmaps,sounds,themes,xsessions,X11},src,src/kernels,src/debug} \
+        usr/{bin,etc,games,include,%{_lib}/{games,sse2,tls,X11,pm-utils/{module.d,power.d,sleep.d}},lib/{games,locale,modules,sse2},libexec,local/{bin,etc,games,lib,%{_lib},sbin,src,share/{applications,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x},info},libexec,include,},sbin,share/{help/C,aclocal,applications,augeas/lenses,backgrounds,desktop-directories,dict,doc,empty,games,ghostscript/conf.d,gnome,icons,idl,info,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x,0p,1p,3p},mime-info,misc,omf,pixmaps,sounds,themes,xsessions,X11},src,src/kernels,src/debug} \
         var/{adm,empty,gopher,lib/{empty,games,misc,rpm-state},local,lock/subsys,log,nis,preserve,run,spool/{mail,lpd,uucp},tmp,db,cache,opt,games,yp}
 
 ln -snf ../var/tmp usr/tmp
@@ -45,60 +55,21 @@ ln -snf usr/sbin sbin
 ln -snf usr/lib lib
 ln -snf usr/%{_lib} %{_lib}
 
-sed -n -f %{buildroot}/iso_639.sed /usr/share/xml/iso-codes/iso_639.xml \
-  >%{buildroot}/iso_639.tab
-sed -n -f %{buildroot}/iso_3166.sed /usr/share/xml/iso-codes/iso_3166.xml \
-  >%{buildroot}/iso_3166.tab
+# Create the locale directories:
+while read LANG ; do
+  echo "%lang(${LANG}) %ghost %config(missingok) /usr/share/locale/${LANG}" >>$RPM_BUILD_DIR/filelist
+  create_dir 0755 root root /usr/share/locale/$LANG/LC_MESSAGES
+  create_dir 0755 root root /usr/share/help/$LANG
+done < %{SOURCE2}
+# Create the locale directories for man:
+while read LANG ; do
+  create_dir 0755 root root /usr/share/man/$LANG
+  for sec in 1 2 3 4 5 6 7 8 9 n; do
+    create_dir 0755 root root /usr/share/man/$LANG/man$sec 
+##"%lang(${LANG}) %ghost %config(missingok)"
+  done
+done < %{SOURCE3}
 
-grep -v "^$" %{buildroot}/iso_639.tab | grep -v "^#" | while read a b c d ; do
-    [[ "$d" =~ "^Reserved" ]] && continue
-    [[ "$d" =~ "^No linguistic" ]] && continue
-
-    locale=$c
-    if [ "$locale" = "XX" ]; then
-        locale=$b
-    fi
-    echo "%lang(${locale})	/usr/share/locale/${locale}" >> $RPM_BUILD_DIR/filelist
-    echo "%lang(${locale}) %ghost %config(missingok) /usr/share/man/${locale}" >>$RPM_BUILD_DIR/filelist
-done
-cat %{SOURCE1} | grep -v "^#" | grep -v "^$" | while read loc ; do
-    locale=$loc
-    locality=
-    special=
-    [[ "$locale" =~ "@" ]] && locale=${locale%%%%@*}
-    [[ "$locale" =~ "_" ]] && locality=${locale##*_}
-    [[ "$locality" =~ "." ]] && locality=${locality%%%%.*}
-    [[ "$loc" =~ "_" ]] || [[ "$loc" =~ "@" ]] || special=$loc
-
-    # If the locality is not official, skip it
-    if [ -n "$locality" ]; then
-        grep -q "^$locality" %{buildroot}/iso_3166.tab || continue
-    fi
-    # If the locale is not official and not special, skip it
-    if [ -z "$special" ]; then
-        egrep -q "[[:space:]]${locale%%_*}[[:space:]]" \
-           %{buildroot}/iso_639.tab || continue
-    fi
-    echo "%lang(${locale})	/usr/share/locale/${loc}" >> $RPM_BUILD_DIR/filelist
-    echo "%lang(${locale})  %ghost %config(missingok) /usr/share/man/${loc}" >> $RPM_BUILD_DIR/filelist
-done
-
-rm -f %{buildroot}/iso_639.tab
-rm -f %{buildroot}/iso_639.sed
-rm -f %{buildroot}/iso_3166.tab
-rm -f %{buildroot}/iso_3166.sed
-
-cat $RPM_BUILD_DIR/filelist | grep "locale" | while read a b ; do
-    mkdir -p -m 755 %{buildroot}/$b/LC_MESSAGES
-done
-
-cat $RPM_BUILD_DIR/filelist | grep "/share/man" | while read a b c d; do
-    mkdir -p -m 755 %{buildroot}/$d/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x,0p,1p,3p}
-done
-
-for i in man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x,0p,1p,3p}; do
-   echo "/usr/share/man/$i" >>$RPM_BUILD_DIR/filelist
-done
 
 %pretrans -p <lua>
 --#
@@ -172,6 +143,7 @@ posix.symlink("../run/lock", "/var/lock")
 %dir /usr/share
 /usr/share/aclocal
 /usr/share/applications
+/usr/share/help/C
 /usr/share/augeas
 /usr/share/backgrounds
 /usr/share/desktop-directories
