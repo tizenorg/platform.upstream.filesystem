@@ -6,7 +6,7 @@ Release:        0
 License:        Public Domain
 Summary:        The basic directory layout for a Linux system
 Url:            https://fedorahosted.org/filesystem
-Group:          System/Base
+Group:          Base/Configuration
 Requires(pre): setup
 Source2:        languages
 Source3:        languages.man
