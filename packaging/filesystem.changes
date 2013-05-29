@@ -1,3 +1,6 @@
+* Wed May 29 2013 Anas Nashif <anas.nashif@intel.com> submit/tizen/20130529.081016@11e5401
+- add /etc/ld.so.conf.d to default file system
+
 * Fri Mar 22 2013 Anas Nashif <anas.nashif@intel.com> submit/trunk/20130306.090327@6d1f77e
 - Fixed package groups
 
