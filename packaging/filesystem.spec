@@ -47,7 +47,8 @@ mkdir -p boot dev \
         home media mnt opt/home/{app,developer} proc root run/lock srv sys tmp \
         usr/{bin,etc,games,include,%{_lib}/{pkgconfig,games,sse2,tls,X11,pm-utils/{module.d,power.d,sleep.d}},lib/{games,locale,modules,sse2},libexec,local/{bin,etc,games,lib,%{_lib},sbin,src,share/{applications,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x},info},libexec,include,},sbin,share/{help/C,aclocal,applications,augeas/lenses,backgrounds,desktop-directories,dict,doc,empty,games,ghostscript/conf.d,gnome,icons,idl,info,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x,0p,1p,3p},mime-info,misc,omf,pixmaps,sounds,themes,xsessions,X11},src,src/kernels,src/debug} \
         var/{adm,empty,gopher,lib/{empty,games,misc,rpm-state},local,lock/subsys,log,nis,preserve,run,spool/{mail,lpd,uucp},tmp,db,cache,opt,games,yp} \
-        opt/{dbspace,usr/dbspace}
+        opt/{dbspace,usr/dbspace} \
+        opt/usr/{media,share}
 
 ln -snf ../var/tmp usr/tmp
 ln -snf spool/mail var/mail
@@ -129,6 +130,8 @@ posix.symlink("/opt/home/developer", "/home/developer")
 %dir %attr(755,root,root) /opt/dbspace
 %dir %attr(755,root,root) /opt/usr
 %dir %attr(755,root,app) /opt/usr/dbspace
+%dir %attr(755,app,app) /opt/usr/media
+%dir %attr(755,app,app) /opt/usr/share
 %attr(555,root,root) /proc
 %attr(550,root,root) /root
 /run
