@@ -1,3 +1,8 @@
+* Tue Nov 26 2013 Rusty Lynch <rusty.lynch@intel.com> accepted/tizen_ivi_stable/20131116.085010@725b1e0
+- TIVI-2017: create media and share directories
+- TIVI-2052: Create tizen dbspace directories
+- Add the creation of the app user home directory and soft link Add the developer home directory
+
 * Fri Jun 14 2013 Anas Nashif <anas.nashif@intel.com> submit/tizen/20130614.193514@280f99a
 - add pkgconfig
 
