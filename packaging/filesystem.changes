@@ -1,3 +1,6 @@
+* Wed Dec 04 2013 Łukasz Stelmach <l.stelmach@samsung.com> accepted/tizen/20131126.190119@88643ce
+- Add directory for Tizen applications: /usr/apps
+
 * Tue Nov 26 2013 Rusty Lynch <rusty.lynch@intel.com> accepted/tizen_ivi_stable/20131116.085010@725b1e0
 - TIVI-2017: create media and share directories
 - TIVI-2052: Create tizen dbspace directories
