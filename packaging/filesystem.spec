@@ -46,11 +46,12 @@ mkdir -p boot dev \
         etc/{X11/{applnk,fontpath.d},xdg/autostart,ld.so.conf.d,opt,pm/{config.d,power.d,sleep.d},xinetd.d,skel,sysconfig,pki} \
         home media mnt opt/home/{app,developer} proc root run/lock srv sys tmp \
         usr/{bin,etc,games,include,%{_lib}/{pkgconfig,games,sse2,tls,X11,pm-utils/{module.d,power.d,sleep.d}},lib/{games,locale,modules,sse2},libexec,local/{bin,etc,games,lib,%{_lib},sbin,src,share/{applications,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x},info},libexec,include,},sbin,share/{help/C,aclocal,applications,augeas/lenses,backgrounds,desktop-directories,dict,doc,empty,games,ghostscript/conf.d,gnome,icons,idl,info,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x,0p,1p,3p},mime-info,misc,omf,pixmaps,sounds,themes,xsessions,X11},src,src/kernels,src/debug} \
-        var/{adm,empty,gopher,lib/{empty,games,misc,rpm-state},local,lock/subsys,log,nis,preserve,run,spool/{mail,lpd,uucp},tmp,db,cache,opt,games,yp} \
+        opt/var/{adm,empty,gopher,lib/{empty,games,misc,rpm-state},local,lock/subsys,log,nis,preserve,run,spool/{mail,lpd,uucp},tmp,db,cache,opt,games,yp} \
         opt/{dbspace,usr/dbspace} \
         opt/usr/{media,share} \
         usr/apps
 
+ln -snf opt/var var
 ln -snf ../var/tmp usr/tmp
 ln -snf spool/mail var/mail
 ln -snf usr/bin bin
@@ -182,27 +183,27 @@ posix.symlink("/opt/home/developer", "/home/developer")
 /usr/src
 /usr/tmp
 %dir /var
-/var/adm
-/var/cache
-/var/db
-/var/empty
-/var/games
-/var/gopher
-/var/lib
-/var/local
-%ghost %dir %attr(755,root,root) /var/lock
-%ghost /var/lock/subsys
-/var/log
-/var/mail
-/var/nis
-/var/opt
-/var/preserve
-%ghost %attr(755,root,root) /var/run
-%dir /var/spool
-%attr(755,root,root) /var/spool/lpd
-%attr(775,root,mail) /var/spool/mail
-%attr(755,uucp,uucp) /var/spool/uucp
-%attr(1777,root,root) /var/tmp
-/var/yp
+/opt/var/adm
+/opt/var/cache
+/opt/var/db
+/opt/var/empty
+/opt/var/games
+/opt/var/gopher
+/opt/var/lib
+/opt/var/local
+%ghost %dir %attr(755,root,root) /opt/var/lock
+%ghost /opt/var/lock/subsys
+/opt/var/log
+/opt/var/mail
+/opt/var/nis
+/opt/var/opt
+/opt/var/preserve
+%ghost %attr(755,root,root) /opt/var/run
+%dir /opt/var/spool
+%attr(755,root,root) /opt/var/spool/lpd
+%attr(775,root,mail) /opt/var/spool/mail
+%attr(755,uucp,uucp) /opt/var/spool/uucp
+%attr(1777,root,root) /opt/var/tmp
+/opt/var/yp
 
 %changelog
