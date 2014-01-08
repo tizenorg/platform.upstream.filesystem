@@ -110,16 +110,16 @@ posix.symlink("/opt/home/developer", "/home/developer")
 %attr(555,root,root) /boot
 /dev
 %dir /etc
-%{_sysconfdir}/X11
-%{_sysconfdir}/xdg
-%{_sysconfdir}/opt
+/etc/X11
+/etc/xdg
+/etc/opt
 %attr(700,app,app) /opt/home/app
 %attr(700,developer,developer) /opt/home/developer
-%{_sysconfdir}/pm
-%{_sysconfdir}/xinetd.d
-%{_sysconfdir}/skel
-%{_sysconfdir}/sysconfig
-%{_sysconfdir}/pki
+/etc/pm
+/etc/xinetd.d
+/etc/skel
+/etc/sysconfig
+/etc/pki
 /home
 /lib
 #%ifarch x86_64 ppc ppc64 sparc sparc64 s390 s390x
@@ -182,27 +182,27 @@ posix.symlink("/opt/home/developer", "/home/developer")
 /usr/src
 /usr/tmp
 %dir /var
-%{_localstatedir}/adm
-%{_localstatedir}/cache
-%{_localstatedir}/db
-%{_localstatedir}/empty
-%{_localstatedir}/games
-%{_localstatedir}/gopher
-%{_localstatedir}/lib
-%{_localstatedir}/local
-%ghost %dir %attr(755,root,root) %{_localstatedir}/lock
-%ghost %{_localstatedir}/lock/subsys
-%{_localstatedir}/log
-%{_localstatedir}/mail
-%{_localstatedir}/nis
-%{_localstatedir}/opt
-%{_localstatedir}/preserve
-%ghost %attr(755,root,root) %{_localstatedir}/run
-%dir %{_localstatedir}/spool
-%attr(755,root,root) %{_localstatedir}/spool/lpd
-%attr(775,root,mail) %{_localstatedir}/spool/mail
-%attr(755,uucp,uucp) %{_localstatedir}/spool/uucp
-%attr(1777,root,root) %{_localstatedir}/tmp
-%{_localstatedir}/yp
+/var/adm
+/var/cache
+/var/db
+/var/empty
+/var/games
+/var/gopher
+/var/lib
+/var/local
+%ghost %dir %attr(755,root,root) /var/lock
+%ghost /var/lock/subsys
+/var/log
+/var/mail
+/var/nis
+/var/opt
+/var/preserve
+%ghost %attr(755,root,root) /var/run
+%dir /var/spool
+%attr(755,root,root) /var/spool/lpd
+%attr(775,root,mail) /var/spool/mail
+%attr(755,uucp,uucp) /var/spool/uucp
+%attr(1777,root,root) /var/tmp
+/var/yp
 
 %changelog
