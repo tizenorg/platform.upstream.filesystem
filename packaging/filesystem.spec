@@ -7,6 +7,7 @@ License:        Public Domain
 Summary:        The basic directory layout for a Linux system
 Url:            https://fedorahosted.org/filesystem
 Group:          Base/Configuration
+BuildRequires:  pkgconfig(libtzplatform-config)
 Requires(pre): setup
 Source2:        languages
 Source3:        languages.man
@@ -44,10 +45,12 @@ cd %{buildroot}
 
 mkdir -p boot dev \
         etc/{X11/{applnk,fontpath.d},xdg/autostart,ld.so.conf.d,opt,pm/{config.d,power.d,sleep.d},xinetd.d,skel,sysconfig,pki} \
-        home media mnt opt/home/{app,developer} proc root run/lock srv sys tmp \
+        home media mnt %{buildroot}%{TZ_SYS_HOME}/app \
+	%{buildroot}%{TZ_SYS_HOME}/developer proc root run/lock srv sys tmp \
         usr/{bin,etc,games,include,%{_lib}/{pkgconfig,games,sse2,tls,X11,pm-utils/{module.d,power.d,sleep.d}},lib/{games,locale,modules,sse2},libexec,local/{bin,etc,games,lib,%{_lib},sbin,src,share/{applications,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x},info},libexec,include,},sbin,share/{help/C,aclocal,applications,augeas/lenses,backgrounds,desktop-directories,dict,doc,empty,games,ghostscript/conf.d,gnome,icons,idl,info,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x,0p,1p,3p},mime-info,misc,omf,pixmaps,sounds,themes,xsessions,X11},src,src/kernels,src/debug} \
         var/{adm,empty,gopher,lib/{empty,games,misc,rpm-state},local,lock/subsys,log,nis,preserve,run,spool/{mail,lpd,uucp},tmp,db,cache,opt,games,yp} \
-        opt/{dbspace,usr/dbspace} \
+	%{buildroot}%{TZ_SYS_DB} \
+	opt/usr/dbspace \
         opt/usr/{media,share} \
         usr/apps
 
@@ -100,8 +103,8 @@ return 0
 %post -p <lua>
 posix.symlink("../run", "/var/run")
 posix.symlink("../run/lock", "/var/lock")
-posix.symlink("/opt/home/app", "/home/app")
-posix.symlink("/opt/home/developer", "/home/developer")
+posix.symlink("%{TZ_SYS_HOME}/app", "%{TZ_SYS_HOME}/app")
+posix.symlink("%{TZ_SYS_HOME}/developer", "%{TZ_SYS_HOME}/developer")
 
 %files -f filelist
 %defattr(0755,root,root,-)
@@ -113,8 +116,8 @@ posix.symlink("/opt/home/developer", "/home/developer")
 %{_sysconfdir}/X11
 %{_sysconfdir}/xdg
 %{_sysconfdir}/opt
-%attr(700,app,app) /opt/home/app
-%attr(700,developer,developer) /opt/home/developer
+%attr(700,app,app) %{TZ_SYS_HOME}/app
+%attr(700,developer,developer) %{TZ_SYS_HOME}/developer
 %{_sysconfdir}/pm
 %{_sysconfdir}/xinetd.d
 %{_sysconfdir}/skel
@@ -128,7 +131,7 @@ posix.symlink("/opt/home/developer", "/home/developer")
 /media
 %dir /mnt
 %dir /opt
-%dir %attr(755,root,root) /opt/dbspace
+%dir %attr(755,root,root) %{TZ_SYS_DB} 
 %dir %attr(755,root,root) /opt/usr
 %dir %attr(755,root,app) /opt/usr/dbspace
 %dir %attr(755,app,app) /opt/usr/media
