@@ -3,7 +3,7 @@
     <domain name="_"/>
  </request>
  <assign>
-    <filesystem path=”/etc” label=”System::Shared” type=”transmutable”/>
-    <filesystem path=”/var/log” label=”System::Log” type=”transmutable”/>
+    <filesystem path="/etc" label="System::Shared" type="transmutable" />
+    <filesystem path="/var/log" label="System::Log" type="transmutable" />
  </assign>
 </manifest>

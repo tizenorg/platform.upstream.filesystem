@@ -10,7 +10,7 @@ Group:          Base/Configuration
 Requires(pre): setup
 Source2:        languages
 Source3:        languages.man
-
+Source1001:     %{name}.manifest
 
 %description
 The filesystem package is one of the basic packages that is installed
@@ -22,6 +22,7 @@ the directories.
 rm -f $RPM_BUILD_DIR/filelist
 
 %build
+cp %{SOURCE1001} .
 
 %install
 function create_dir () {
@@ -104,6 +105,7 @@ posix.symlink("/opt/home/app", "/home/app")
 posix.symlink("/opt/home/developer", "/home/developer")
 
 %files -f filelist
+%manifest %{name}.manifest
 %defattr(0755,root,root,-)
 %dir %attr(555,root,root)
 /bin
