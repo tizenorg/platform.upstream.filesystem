@@ -5,5 +5,7 @@
  <assign>
     <filesystem path="/etc" label="System::Shared" type="transmutable" />
     <filesystem path="/var/log" label="System::Log" type="transmutable" />
+    <filesystem path="/tmp" label="*" />
+    <filesystem path="/var/tmp" label="*" />
  </assign>
 </manifest>
