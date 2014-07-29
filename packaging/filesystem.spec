@@ -73,7 +73,7 @@ ln -snf usr/%{_lib} %{_lib}
 ln -snf lib usr/%{_lib}
 %endif
 
-%ifarch x86_64 ppc ppc64 sparc sparc64 s390 s390x aarch64
+%ifarch aarch64
 mkdir usr/lib32
 ln -snf usr/lib32 lib32
 %endif
@@ -141,8 +141,8 @@ posix.symlink("../run/lock", "/var/lock")
 %{_sysconfdir}/pki
 /home
 /lib
-%ifarch x86_64 ppc ppc64 sparc sparc64 s390 s390x aarch64
 /%{_lib}
+%ifarch aarch64
 /lib32
 %endif
 /media
@@ -162,8 +162,8 @@ posix.symlink("../run/lock", "/var/lock")
 /usr/games
 /usr/include
 %attr(555,root,root) /usr/lib
-%ifarch x86_64 ppc ppc64 sparc sparc64 s390 s390x aarch64
 %attr(555,root,root) /usr/%{_lib}
+%ifarch aarch64
 %attr(555,root,root) /usr/lib32
 %endif
 /usr/libexec
