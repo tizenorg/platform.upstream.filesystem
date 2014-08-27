@@ -70,7 +70,7 @@ ln -snf usr/sbin sbin
 ln -snf usr/lib lib
 ln -snf usr/%{_lib} %{_lib}
 %ifarch aarch64
-ln -snf lib usr/%{_lib}
+ln -snf usr/%{_lib} lib
 mkdir usr/lib32
 ln -snf usr/lib32 lib32
 %endif
