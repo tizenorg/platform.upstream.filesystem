@@ -61,6 +61,7 @@ mkdir -p boot dev \
 %endif
         var/{adm,empty,gopher,lib/{empty,games,misc,rpm-state},local,lock/subsys,log,nis,preserve,run,spool/{mail,lpd,uucp},tmp,db,cache,opt,games,yp} \
         %{buildroot}%{TZ_SYS_DB} \
+        %{buildroot}%{_sysconfdir}/skel/%{TZ_SYS_USER_SHARED_ENTRY} \
         %{buildroot}%{TZ_SYS_RO_APP}
 
 ln -snf ../var/tmp usr/tmp
