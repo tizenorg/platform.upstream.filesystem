@@ -103,8 +103,8 @@ end
 return 0
 
 %post -p <lua>
-posix.symlink("../run", "/var/run")
-posix.symlink("../run/lock", "/var/lock")
+posix.symlink("/run", "/var/run")
+posix.symlink("/run/lock", "/var/lock")
 
 %files -f filelist
 %manifest %{name}.manifest
