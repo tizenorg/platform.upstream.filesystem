@@ -58,7 +58,7 @@ mkdir -p boot dev \
 
 ln -snf opt/var var
 ln -snf ../var/tmp usr/tmp
-ln -snf spool/mail opt/var/mail
+ln -snf spool/mail var/mail
 ln -snf usr/bin bin
 ln -snf usr/sbin sbin
 ln -snf usr/lib lib
@@ -99,6 +99,19 @@ for i,dir in ipairs({"/lib", "/%{_lib}", "/sbin", "/bin"}) do
         posix.mkdir("/usr"..dir)
         if posix.stat(dir, "mode") == nil then
             posix.symlink("usr"..dir, dir)
+        end
+    end
+end
+
+if posix.stat("/opt") == nil then
+    posix.mkdir("/opt")
+end
+
+for i,dir in ipairs({"/var"}) do
+    if posix.stat("/opt"..dir) == nil then
+        posix.mkdir("/opt"..dir)
+        if posix.stat(dir, "mode") == nil then
+            posix.symlink("opt"..dir, dir)
         end
     end
 end
@@ -185,28 +198,28 @@ posix.symlink("/run/lock", "/var/lock")
 /usr/src
 /usr/tmp
 /var
-%dir /opt/var
-%{_localstatedir}/adm
-%{_localstatedir}/cache
-%{_localstatedir}/db
-%{_localstatedir}/empty
-%{_localstatedir}/games
-%{_localstatedir}/gopher
-%{_localstatedir}/lib
-%{_localstatedir}/local
-%ghost %dir %attr(755,root,root) %{_localstatedir}/lock
-%ghost %{_localstatedir}/lock/subsys
-%{_localstatedir}/log
-%{_localstatedir}/mail
-%{_localstatedir}/nis
-%{_localstatedir}/opt
-%{_localstatedir}/preserve
-%ghost %attr(755,root,root) %{_localstatedir}/run
-%dir %{_localstatedir}/spool
-%attr(755,root,root) %{_localstatedir}/spool/lpd
-%attr(775,root,mail) %{_localstatedir}/spool/mail
-%attr(755,uucp,uucp) %{_localstatedir}/spool/uucp
-%attr(1777,root,root) %{_localstatedir}/tmp
-%{_localstatedir}/yp
+/opt/var
+/opt%{_localstatedir}/adm
+/opt%{_localstatedir}/cache
+/opt%{_localstatedir}/db
+/opt%{_localstatedir}/empty
+/opt%{_localstatedir}/games
+/opt%{_localstatedir}/gopher
+/opt%{_localstatedir}/lib
+/opt%{_localstatedir}/local
+%ghost %dir %attr(755,root,root) /opt%{_localstatedir}/lock
+%ghost /opt%{_localstatedir}/lock/subsys
+/opt%{_localstatedir}/log
+/opt%{_localstatedir}/mail
+/opt%{_localstatedir}/nis
+/opt%{_localstatedir}/opt
+/opt%{_localstatedir}/preserve
+%ghost %attr(755,root,root) /opt%{_localstatedir}/run
+%dir /opt%{_localstatedir}/spool
+%attr(755,root,root) /opt%{_localstatedir}/spool/lpd
+%attr(775,root,mail) /opt%{_localstatedir}/spool/mail
+%attr(755,uucp,uucp) /opt%{_localstatedir}/spool/uucp
+%attr(1777,root,root) /opt%{_localstatedir}/tmp
+/opt%{_localstatedir}/yp
 
 %changelog
