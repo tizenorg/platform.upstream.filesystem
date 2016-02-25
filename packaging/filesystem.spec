@@ -52,10 +52,13 @@ mkdir -p boot dev \
 	usr/share/{xsessions,X11} \
 %endif
 	etc/{xdg/autostart,ld.so.conf.d,opt,pm/{config.d,power.d,sleep.d},xinetd.d,skel,sysconfig,pki} \
-        home media mnt proc root run/lock srv sys tmp \
+        mnt proc root run/lock srv sys tmp \
+        opt/{home,media,usr,share,dbspace,data,etc} \
         usr/{bin,etc,games,include,%{_lib}/{pkgconfig,games,sse2,tls,X11,pm-utils/{module.d,power.d,sleep.d}},lib/{games,locale,modules,sse2},libexec,local/{bin,etc,games,lib,%{_lib},sbin,src,share/{applications,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x},info},libexec,include,},sbin,share/{help/C,aclocal,applications,augeas/lenses,backgrounds,desktop-directories,dict,doc,empty,games,ghostscript/conf.d,gnome,idl,info,man/man{1,2,3,4,5,6,7,8,9,n,1x,2x,3x,4x,5x,6x,7x,8x,9x,0p,1p,3p},mime-info,misc,omf,pixmaps,sounds,themes},src,src/kernels,src/debug} \
         var/{adm,empty,gopher,lib/{empty,games,misc,rpm-state},local,lock/subsys,log,nis,preserve,run,spool/{mail,lpd,uucp},tmp,db,cache,opt,games,yp}
 
+ln -snf opt/home home
+ln -snf opt/media media
 ln -snf ../var/tmp usr/tmp
 ln -snf spool/mail var/mail
 ln -snf usr/bin bin
@@ -124,12 +127,19 @@ posix.symlink("/run/lock", "/var/lock")
 %{_sysconfdir}/skel
 %{_sysconfdir}/sysconfig
 %{_sysconfdir}/pki
+/opt/usr
+/opt/share
+/opt/dbspace
+/opt/data/
+/opt/etc
 /home
+/opt/home
 /lib
 #%ifarch x86_64 ppc ppc64 sparc sparc64 s390 s390x
 /%{_lib}
 #%endif
 /media
+/opt/media
 %dir /mnt
 %attr(555,root,root) /proc
 %attr(550,root,root) /root
