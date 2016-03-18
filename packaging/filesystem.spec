@@ -6,7 +6,7 @@
 Name:           filesystem
 Version:        3.1
 Release:        0
-License:        Public Domain
+License:        PD
 Summary:        The basic directory layout for a Linux system
 Url:            https://fedorahosted.org/filesystem
 Group:          Base/Configuration
